@@ -609,7 +609,8 @@ const HomePage = ({ setCurrentView, searchFilters, setSearchFilters, fields, loa
                             >
                                 {/* Image */}
                                 <div className="relative h-48 overflow-hidden">
-                                    <img src={field.HinhAnh} alt={field.TenSan} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                    <img src={field.HinhAnh || 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&h=400&fit=crop'} alt={field.TenSan} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&h=400&fit=crop'; }} />
+
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
                                     <div className="absolute top-4 right-4">
                                         <span className="px-3 py-1 bg-emerald-500/90 text-white text-xs font-bold rounded-full">{field.LoaiSan}</span>

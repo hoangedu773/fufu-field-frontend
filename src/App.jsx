@@ -214,13 +214,13 @@ const ChatBox = ({ currentUser, onClose }) => {
 
     const fetchMessages = async () => {
         try {
-            const res = await fetch(`http://localhost:5000/api/messages?userId=${currentUser.id}`);
+            const res = await fetch(`https://fufu-field-backend.onrender.com/api/messages?userId=${currentUser.id}`);
             if (res.ok) setMessages(await res.json());
         } catch (e) { }
     };
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/messages/read', {
+        fetch('https://fufu-field-backend.onrender.com/api/messages/read', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: currentUser.id, isAdminViewer: false })
@@ -238,7 +238,7 @@ const ChatBox = ({ currentUser, onClose }) => {
     const handleSend = async () => {
         if (!input.trim()) return;
         try {
-            await fetch('http://localhost:5000/api/messages', {
+            await fetch('https://fufu-field-backend.onrender.com/api/messages', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: currentUser.id, content: input, isAdmin: false })
             });
@@ -392,7 +392,7 @@ const UserProfilePage = ({ currentUser, handleLogout }) => {
 
     const handleUpdateInfo = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/user/update-info', {
+            const res = await fetch('https://fufu-field-backend.onrender.com/api/user/update-info', {
                 method: 'PUT', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
@@ -405,7 +405,7 @@ const UserProfilePage = ({ currentUser, handleLogout }) => {
 
     const handleChangePassword = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/user/change-password', {
+            const res = await fetch('https://fufu-field-backend.onrender.com/api/user/change-password', {
                 method: 'PUT', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: currentUser.id, ...passData })
             });
@@ -840,7 +840,7 @@ const FieldDetailPage = ({ selectedField, setCurrentView, isLoggedIn, searchFilt
 
     useEffect(() => {
         if (selectedField) {
-            fetch(`http://localhost:5000/api/reviews?sanId=${selectedField.SanID}`)
+            fetch(`https://fufu-field-backend.onrender.com/api/reviews?sanId=${selectedField.SanID}`)
                 .then(res => res.json()).then(setReviews).catch(console.error);
         }
     }, [selectedField]);
@@ -849,14 +849,14 @@ const FieldDetailPage = ({ selectedField, setCurrentView, isLoggedIn, searchFilt
         if (!isLoggedIn) { alert("Vui lòng đăng nhập để đánh giá!"); return; }
         if (!newComment.trim()) { alert("Nhập nội dung!"); return; }
         try {
-            const res = await fetch('http://localhost:5000/api/reviews', {
+            const res = await fetch('https://fufu-field-backend.onrender.com/api/reviews', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ SanID: selectedField.SanID, NguoiDung: currentUser.name, NoiDung: newComment, SoSao: newRating })
             });
             if (res.ok) {
                 alert("Cảm ơn bạn đã đánh giá!");
                 setNewComment('');
-                fetch(`http://localhost:5000/api/reviews?sanId=${selectedField.SanID}`).then(res => res.json()).then(setReviews);
+                fetch(`https://fufu-field-backend.onrender.com/api/reviews?sanId=${selectedField.SanID}`).then(res => res.json()).then(setReviews);
             }
         } catch (e) { alert("Lỗi gửi đánh giá"); }
     };
@@ -1227,7 +1227,7 @@ const LoginPage = ({ authMode, setAuthMode, handleLogin, setCurrentView }) => {
         if (!inputEmail) { alert("Vui lòng nhập Email đã đăng ký!"); return; }
         setIsLoading(true);
         try {
-            const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
+            const res = await fetch('https://fufu-field-backend.onrender.com/api/auth/forgot-password', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: inputEmail })
             });
             const data = await res.json();
@@ -1460,7 +1460,7 @@ const HistoryPage = ({ setCurrentView, history, setHistory, clearHistory, curren
         try {
             // Gọi API xóa từ DB nếu có bookingId
             if (item.bookingId) {
-                await fetch(`http://localhost:5000/api/bookings/${item.bookingId}`, { method: 'DELETE' });
+                await fetch(`https://fufu-field-backend.onrender.com/api/bookings/${item.bookingId}`, { method: 'DELETE' });
             }
         } catch (e) { console.error("Lỗi xóa từ DB:", e); }
         // Xóa khỏi local state
@@ -1485,7 +1485,7 @@ const HistoryPage = ({ setCurrentView, history, setHistory, clearHistory, curren
         try {
             // Gọi API update nếu có bookingId
             if (item.bookingId) {
-                await fetch(`http://localhost:5000/api/bookings/${item.bookingId}`, {
+                await fetch(`https://fufu-field-backend.onrender.com/api/bookings/${item.bookingId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ startTime: editForm.startTime, endTime: editForm.endTime })
@@ -1698,11 +1698,11 @@ const AdminPage = ({ fields, onAddField, onDeleteField, currentUser }) => {
 
     // Fetch dữ liệu
     const fetchData = () => {
-        fetch('http://localhost:5000/api/admin/stats').then(res => res.json()).then(setStats).catch(() => { });
-        fetch('http://localhost:5000/api/admin/users').then(res => res.json()).then(setUsers).catch(() => { });
-        fetch('http://localhost:5000/api/admin/reviews').then(res => res.json()).then(setReviews).catch(() => { });
-        fetch('http://localhost:5000/api/sanbong').then(res => res.json()).then(setAdminFields).catch(() => { });
-        fetch('http://localhost:5000/api/bookings-list').then(res => res.json()).then(data => {
+        fetch('https://fufu-field-backend.onrender.com/api/admin/stats').then(res => res.json()).then(setStats).catch(() => { });
+        fetch('https://fufu-field-backend.onrender.com/api/admin/users').then(res => res.json()).then(setUsers).catch(() => { });
+        fetch('https://fufu-field-backend.onrender.com/api/admin/reviews').then(res => res.json()).then(setReviews).catch(() => { });
+        fetch('https://fufu-field-backend.onrender.com/api/sanbong').then(res => res.json()).then(setAdminFields).catch(() => { });
+        fetch('https://fufu-field-backend.onrender.com/api/bookings-list').then(res => res.json()).then(data => {
             setBookings(data);
             // Tính doanh thu theo tháng từ bookings
             const revenueByMonth = {};
@@ -1716,13 +1716,13 @@ const AdminPage = ({ fields, onAddField, onDeleteField, currentUser }) => {
                 { month: 'T4', revenue: 4100000 }, { month: 'T5', revenue: 3600000 }, { month: 'T6', revenue: 4800000 }
             ]);
         }).catch(() => { });
-        fetch('http://localhost:5000/api/messages').then(res => res.json()).then(setChatUsers).catch(() => { });
+        fetch('https://fufu-field-backend.onrender.com/api/messages').then(res => res.json()).then(setChatUsers).catch(() => { });
     };
 
     useEffect(() => {
         fetchData();
         const interval = setInterval(() => {
-            fetch('http://localhost:5000/api/messages').then(res => res.json()).then(setChatUsers);
+            fetch('https://fufu-field-backend.onrender.com/api/messages').then(res => res.json()).then(setChatUsers);
         }, 3000);
         return () => clearInterval(interval);
     }, []);
@@ -1730,10 +1730,10 @@ const AdminPage = ({ fields, onAddField, onDeleteField, currentUser }) => {
     useEffect(() => {
         if (activeTab === 'chat' && selectedChatUser) {
             const interval = setInterval(async () => {
-                const res = await fetch(`http://localhost:5000/api/messages?userId=${selectedChatUser.KhachHangID}`);
+                const res = await fetch(`https://fufu-field-backend.onrender.com/api/messages?userId=${selectedChatUser.KhachHangID}`);
                 if (res.ok) {
                     setAdminMessages(await res.json());
-                    fetch('http://localhost:5000/api/messages/read', {
+                    fetch('https://fufu-field-backend.onrender.com/api/messages/read', {
                         method: 'PUT', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ userId: selectedChatUser.KhachHangID, isAdminViewer: true })
                     });
@@ -1745,7 +1745,7 @@ const AdminPage = ({ fields, onAddField, onDeleteField, currentUser }) => {
 
     const sendAdminMessage = async () => {
         if (!adminInput) return;
-        await fetch('http://localhost:5000/api/messages', {
+        await fetch('https://fufu-field-backend.onrender.com/api/messages', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: selectedChatUser.KhachHangID, content: adminInput, isAdmin: true })
         });
@@ -1757,7 +1757,7 @@ const AdminPage = ({ fields, onAddField, onDeleteField, currentUser }) => {
     const resetForm = () => { setIsEditing(false); setCurrentFieldId(null); setFieldForm({ TenSan: '', DiaChi: '', GiaTheoGio: 200000, LoaiSan: 'Sân 5', HinhAnh: '', MoTa: '', TienIch: '' }); };
     const handleSaveField = async () => {
         if (!fieldForm.TenSan || !fieldForm.DiaChi) { alert("Nhập thiếu thông tin!"); return; }
-        const url = isEditing ? `http://localhost:5000/api/sanbong/${currentFieldId}` : 'http://localhost:5000/api/sanbong';
+        const url = isEditing ? `https://fufu-field-backend.onrender.com/api/sanbong/${currentFieldId}` : 'https://fufu-field-backend.onrender.com/api/sanbong';
         const method = isEditing ? 'PUT' : 'POST';
         try {
             const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fieldForm) });
@@ -1791,7 +1791,7 @@ const AdminPage = ({ fields, onAddField, onDeleteField, currentUser }) => {
                 fieldType: walkinForm.fieldType,
                 walkIn: true // Đánh dấu là đặt hộ
             };
-            const res = await fetch('http://localhost:5000/api/bookings', {
+            const res = await fetch('https://fufu-field-backend.onrender.com/api/bookings', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(bookingData)
             });
@@ -1807,7 +1807,7 @@ const AdminPage = ({ fields, onAddField, onDeleteField, currentUser }) => {
     const handleDeleteBooking = async (bookingId) => {
         if (!confirm("Xóa lịch đặt này?")) return;
         try {
-            const res = await fetch(`http://localhost:5000/api/bookings/${bookingId}`, { method: 'DELETE' });
+            const res = await fetch(`https://fufu-field-backend.onrender.com/api/bookings/${bookingId}`, { method: 'DELETE' });
             if (res.ok) { alert("Đã xóa!"); fetchData(); }
         } catch (e) { alert("Lỗi xóa"); }
     };
@@ -2186,12 +2186,12 @@ const FootballBookingApp = () => {
     const [qrTimer, setQrTimer] = useState(60);
     const [busySlots, setBusySlots] = useState([]);
 
-    const fetchFields = async () => { try { const response = await fetch('http://localhost:5000/api/sanbong'); if (!response.ok) throw new Error('Err'); const data = await response.json(); setFields(data); setLoading(false); } catch (error) { console.error("Lỗi data:", error); setLoading(false); } };
+    const fetchFields = async () => { try { const response = await fetch('https://fufu-field-backend.onrender.com/api/sanbong'); if (!response.ok) throw new Error('Err'); const data = await response.json(); setFields(data); setLoading(false); } catch (error) { console.error("Lỗi data:", error); setLoading(false); } };
 
     const fetchUnread = async () => {
         if (currentUser && currentUser.role !== 'admin') {
             try {
-                const res = await fetch(`http://localhost:5000/api/messages?userId=${currentUser.id}`);
+                const res = await fetch(`https://fufu-field-backend.onrender.com/api/messages?userId=${currentUser.id}`);
                 if (res.ok) {
                     const msgs = await res.json();
                     const count = msgs.filter(m => m.IsAdminSender && !m.IsRead).length;
@@ -2202,14 +2202,14 @@ const FootballBookingApp = () => {
     };
 
     useEffect(() => { const interval = setInterval(fetchUnread, 3000); return () => clearInterval(interval); }, [currentUser]);
-    useEffect(() => { if (selectedField && searchFilters.date) { const fetchBusy = async () => { try { const res = await fetch(`http://localhost:5000/api/check-trung-gio?sanId=${selectedField.SanID}&ngay=${searchFilters.date}&loaiSan=${bookingInfo.fieldType}`); if (res.ok) { const data = await res.json(); setBusySlots(data); } } catch (e) { console.error(e); } }; fetchBusy(); } }, [selectedField, searchFilters.date, bookingInfo.fieldType]);
+    useEffect(() => { if (selectedField && searchFilters.date) { const fetchBusy = async () => { try { const res = await fetch(`https://fufu-field-backend.onrender.com/api/check-trung-gio?sanId=${selectedField.SanID}&ngay=${searchFilters.date}&loaiSan=${bookingInfo.fieldType}`); if (res.ok) { const data = await res.json(); setBusySlots(data); } } catch (e) { console.error(e); } }; fetchBusy(); } }, [selectedField, searchFilters.date, bookingInfo.fieldType]);
     useEffect(() => { const savedUser = localStorage.getItem('currentUser'); if (savedUser) { const user = JSON.parse(savedUser); setCurrentUser(user); setIsLoggedIn(true); if (user.phone === 'admin') setCurrentView('admin'); const savedHistory = localStorage.getItem('bookingHistory_' + user.phone); if (savedHistory) setHistory(JSON.parse(savedHistory)); } fetchFields(); }, []);
 
     const handleLogin = async (phone, password, name = '', isRegister = false, email = '', address = '') => {
         const endpoint = isRegister ? 'register' : 'login';
         const body = isRegister ? { phone, password, fullName: name, email, address } : { phone, password };
         try {
-            const res = await fetch(`http://localhost:5000/api/auth/${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            const res = await fetch(`https://fufu-field-backend.onrender.com/api/auth/${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
             const result = await res.json();
             if (!res.ok) { alert(`Lỗi: ${result.message}`); return false; }
             if (isRegister) { alert('Đăng ký thành công! Vui lòng đăng nhập.'); setAuthMode('login'); return true; }
@@ -2221,11 +2221,11 @@ const FootballBookingApp = () => {
     const handleLogout = () => { localStorage.removeItem('currentUser'); setIsLoggedIn(false); setCurrentUser(null); setHistory([]); setCurrentView('login'); window.location.reload(); };
 
     // RELOAD KHI ĐẶT SÂN THÀNH CÔNG
-    const saveBooking = async () => { try { const res = await fetch('http://localhost:5000/api/dat-san', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ SanID: selectedField.SanID, NgayDat: searchFilters.date, GioBatDau: bookingInfo.startTime, GioKetThuc: bookingInfo.endTime, TenKhach: bookingInfo.name, SDT: bookingInfo.phone, LoaiSan: bookingInfo.fieldType }) }); if (!res.ok) alert("Có lỗi khi lưu vào Database."); } catch (e) { console.error("Lỗi lưu DB", e); } const newBooking = { san: selectedField.TenSan, sanType: bookingInfo.fieldType, ngay: searchFilters.date, gio: `${bookingInfo.startTime} - ${bookingInfo.endTime}`, gia: bookingInfo.totalPrice, nguoiDat: bookingInfo.name, sdt: bookingInfo.phone, timestamp: new Date().toISOString() }; const updatedHistory = [...history, newBooking]; setHistory(updatedHistory); localStorage.setItem('bookingHistory_' + currentUser.phone, JSON.stringify(updatedHistory)); alert('Thanh toán thành công! Sân đã được lưu.'); setCurrentView('home'); setShowQR(false); window.location.reload(); };
+    const saveBooking = async () => { try { const res = await fetch('https://fufu-field-backend.onrender.com/api/dat-san', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ SanID: selectedField.SanID, NgayDat: searchFilters.date, GioBatDau: bookingInfo.startTime, GioKetThuc: bookingInfo.endTime, TenKhach: bookingInfo.name, SDT: bookingInfo.phone, LoaiSan: bookingInfo.fieldType }) }); if (!res.ok) alert("Có lỗi khi lưu vào Database."); } catch (e) { console.error("Lỗi lưu DB", e); } const newBooking = { san: selectedField.TenSan, sanType: bookingInfo.fieldType, ngay: searchFilters.date, gio: `${bookingInfo.startTime} - ${bookingInfo.endTime}`, gia: bookingInfo.totalPrice, nguoiDat: bookingInfo.name, sdt: bookingInfo.phone, timestamp: new Date().toISOString() }; const updatedHistory = [...history, newBooking]; setHistory(updatedHistory); localStorage.setItem('bookingHistory_' + currentUser.phone, JSON.stringify(updatedHistory)); alert('Thanh toán thành công! Sân đã được lưu.'); setCurrentView('home'); setShowQR(false); window.location.reload(); };
 
     const clearHistory = () => { if (window.confirm("Xóa lịch sử?")) { setHistory([]); localStorage.removeItem('bookingHistory_' + currentUser.phone); } };
-    const handleAddField = async (newFieldData) => { try { const res = await fetch('http://localhost:5000/api/sanbong', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newFieldData) }); if (res.ok) { alert('Thêm sân thành công!'); fetchFields(); } } catch (err) { alert('Lỗi thêm sân'); } };
-    const handleDeleteField = async (id) => { if (!window.confirm("Xóa sân này?")) return; try { const res = await fetch(`http://localhost:5000/api/sanbong/${id}`, { method: 'DELETE' }); if (res.ok) { alert('Đã xóa sân!'); fetchFields(); } } catch (err) { alert('Lỗi xóa sân'); } };
+    const handleAddField = async (newFieldData) => { try { const res = await fetch('https://fufu-field-backend.onrender.com/api/sanbong', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newFieldData) }); if (res.ok) { alert('Thêm sân thành công!'); fetchFields(); } } catch (err) { alert('Lỗi thêm sân'); } };
+    const handleDeleteField = async (id) => { if (!window.confirm("Xóa sân này?")) return; try { const res = await fetch(`https://fufu-field-backend.onrender.com/api/sanbong/${id}`, { method: 'DELETE' }); if (res.ok) { alert('Đã xóa sân!'); fetchFields(); } } catch (err) { alert('Lỗi xóa sân'); } };
 
     useEffect(() => { let interval; if (showQR && qrTimer > 0) interval = setInterval(() => setQrTimer(prev => prev - 1), 1000); else if (qrTimer === 0) { alert("Hết thời gian!"); setShowQR(false); setQrTimer(60); } return () => clearInterval(interval); }, [showQR, qrTimer]);
     useEffect(() => { if (bookingInfo.startTime && bookingInfo.endTime) { const price = calculateComplexPrice(searchFilters.date, bookingInfo.startTime, bookingInfo.endTime, bookingInfo.fieldType); setBookingInfo(prev => ({ ...prev, totalPrice: price })); } }, [bookingInfo.startTime, bookingInfo.endTime, searchFilters.date, bookingInfo.fieldType]);
